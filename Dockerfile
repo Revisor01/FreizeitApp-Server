@@ -1,5 +1,5 @@
 # Basis-Image
-FROM node:22
+FROM node:20-alpine
 
 # Arbeitsverzeichnis im Container
 WORKDIR /usr/src/app
@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Installieren der Abhängigkeiten
-RUN npm install
+RUN npm ci --only=production
 
 # Kopieren des Quellcodes
 COPY . .
