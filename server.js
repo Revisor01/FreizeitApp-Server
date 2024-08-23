@@ -10,24 +10,27 @@ const path = require('path');
 const fs = require('fs').promises;
 
 const app = express();
+
+// Konfiguration
+const PORT = process.env.PORT || 54322;
+const DB_CONFIG = {
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'sfz',
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME || 'freizeit_db'
+};
+
+// Middleware
 app.use(cors({
-  origin: '*',
+  origin: process.env.CORS_ORIGIN || '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
 }));
 app.use(bodyParser.json());
+app.use(require('morgan')('dev'));
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
-
-// Fügen Sie diese Zeilen am Anfang Ihrer server.js hinzutext
-const morgan = require('morgan');
-app.use(morgan('dev')); // Logging für alle Anfragen
-
-// Multer Konfiguration für Bildupload
+// Multer Konfiguration
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, 'uploads/'),
   filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
@@ -35,31 +38,23 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // Datenbankverbindung
-const dbConfig = {
-  host: 'server.godsapp.de',
-  user: 'sfz',
-  password: 'R#ZCLCmHxA4wGwr9J$',
-  database: 'freizeit_db'
-};
+async function getDbConnection() {
+  return await mysql.createConnection(DB_CONFIG);
+}
 
-// Funktion zur Initialisierung der Datenbank
+// Datenbankinitialisierung (optional)
 async function initializeDatabase() {
-  let connection;
-  try {
-    connection = await mysql.createConnection({
-      ...dbConfig,
-      multipleStatements: true
-    });
-    
-    const sql = await fs.readFile('initial_schema.sql', 'utf8');
-    
-    await connection.query(sql);
-    console.log('Database schema created successfully');
-  } catch (error) {
-    console.error('Error initializing database:', error);
-  } finally {
-    if (connection) {
-      await connection.end();
+  if (process.env.NODE_ENV !== 'production') {
+    let connection;
+    try {
+      connection = await getDbConnection();
+      const sql = await fs.readFile('initial_schema.sql', 'utf8');
+      await connection.query(sql);
+      console.log('Database schema created successfully');
+    } catch (error) {
+      console.error('Error initializing database:', error);
+    } finally {
+      if (connection) await connection.end();
     }
   }
 }
@@ -279,8 +274,6 @@ app.put('/access_requests/:id/approve', authenticateJWT, isLeader, async (req, r
   }
 });
 
-const PORT = 54322;
-
 async function startServer() {
   try {
     await initializeDatabase();
@@ -292,10 +285,14 @@ async function startServer() {
   }
 }
 
-startServer();
+// Globale Fehlerbehandlung
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Ein interner Serverfehler ist aufgetreten' });
+});
 
-// Am Ende Ihrer server.js
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  // Anwendung hier nicht beenden, nur loggen
 });
+
+startServer();
