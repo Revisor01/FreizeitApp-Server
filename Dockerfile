@@ -11,7 +11,7 @@ COPY package*.json ./
 RUN npm ci --only=production
 
 # Kopieren des Quellcodes
-COPY . .
+COPY server.js ./
 
 # Port freigeben
 EXPOSE 54322
