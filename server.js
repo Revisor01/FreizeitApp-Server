@@ -23,7 +23,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something broke!');
 });
 
-// Fügen Sie diese Zeilen am Anfang Ihrer server.js hinzu
+// Fügen Sie diese Zeilen am Anfang Ihrer server.js hinzutext
 const morgan = require('morgan');
 app.use(morgan('dev')); // Logging für alle Anfragen
 
