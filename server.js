@@ -13,7 +13,7 @@ const app = express();
 
 // Konfiguration
 const PORT = process.env.PORT || 54322;
-const DB_CONFIG = {
+const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'sfz',
   password: process.env.DB_PASSWORD,
@@ -39,7 +39,7 @@ const upload = multer({ storage: storage });
 
 // Datenbankverbindung
 async function getDbConnection() {
-  return await mysql.createConnection(DB_CONFIG);
+  return await mysql.createConnection(dbConfig);
 }
 
 // Datenbankinitialisierung (optional)
