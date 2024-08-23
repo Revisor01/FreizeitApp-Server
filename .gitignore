@@ -1,39 +1,70 @@
-# Node
+# Abhängigkeiten
 node_modules/
-npm-debug.log
-yarn-error.log
 
-# iOS
-ios/Pods/
-ios/build/
-ios/Podfile.lock
+# Logs
+logs
+*.log
+npm-debug.log*
 
-# Android
-android/app/build/
-android/build/
-android/.gradle/
-android/local.properties
+# Laufzeit-Daten
+pids
+*.pid
+*.seed
+*.pid.lock
 
-# React Native
-.expo/
-*.jks
-*.p8
-*.p12
-*.key
-*.mobileprovision
-*.orig.*
+# Verzeichnis für instrumentierte Libs
+lib-cov
 
-# macOS
-.DS_Store
+# Coverage-Verzeichnis
+coverage
 
-# VS Code
-.vscode/
+# nyc Test Coverage
+.nyc_output
 
-# Environment variables
+# Grunt intermediate storage
+.grunt
+
+# Bower dependency directory
+bower_components
+
+# node-waf Konfiguration
+.lock-wscript
+
+# Kompilierte Binär-Addons
+build/Release
+
+# Dependency directories
+jspm_packages/
+
+# TypeScript v1 declaration files
+typings/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output von 'npm pack'
+*.tgz
+
+# dotenv environment variables file
 .env
 
-# Optional: Android Studio
-*.iml
+# Produktions-Build-Verzeichnis
+dist/
+
+# Uploads-Verzeichnis
+uploads/
+
+# Docker-Volumes
+docker-volumes/
+
+# IDE-spezifische Dateien
+.vscode/
 .idea/
-.gradle/
-local.properties
+*.swp
+*.swo
