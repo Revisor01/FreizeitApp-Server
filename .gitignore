@@ -1,0 +1,39 @@
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# iOS
+ios/Pods/
+ios/build/
+ios/Podfile.lock
+
+# Android
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+
+# React Native
+.expo/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Environment variables
+.env
+
+# Optional: Android Studio
+*.iml
+.idea/
+.gradle/
+local.properties
